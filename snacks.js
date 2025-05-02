@@ -37,4 +37,21 @@ function findPostById(posts,id){
   });
   return posts.find((post)=>post.id === id) || null
 }
-  module.exports = {getInitials,createSlug,getMediaof,isPalindrome,findPostById}
+
+function addPost(posts,post){
+  const Ids = posts.map((post)=>post.id)
+  const Slugs = posts.map((post)=>post.slug)
+  if(Ids.includes(post.id)){
+    throw new Error('id already exists')
+  }
+  if(Slugs.includes(post.slug)){
+    throw new Error('slug already exists')
+  }
+  return posts.push(post)
+}
+
+function removePost(posts,id){
+  const index = posts.findIndex((post)=>post.id === id)
+  posts.splice(index,1)
+}
+  module.exports = {getInitials,createSlug,getMediaof,isPalindrome,findPostById,addPost,removePost}

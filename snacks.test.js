@@ -1,4 +1,4 @@
-const { getInitials, createSlug, getMediaof, isPalindrome, findPostById } = require('./snacks');
+const { getInitials, createSlug, getMediaof, isPalindrome, findPostById,addPost,removePost } = require('./snacks');
 
 describe('String testing', () => {
     test('function getInitails return initals of complete name', () => {
@@ -27,14 +27,32 @@ describe('Numbers testing', () => {
         expect(getMediaof([1, 2, 3])).toBe(2)
     })
 
+    let posts;
 
-    const posts = [
+    beforeEach(()=>{
+        posts = [
         { id: 1, title: "First Item", slug: "first-item" },
         { id: 2, title: "Second Item", slug: "second-item" },
         { id: 3, title: "Third Item", slug: "third-item" },
         { id: 4, title: "Fourth Item", slug: "fourth-item" },
         { id: 5, title: "Fifth Item", slug: "fifth-item" }
     ]
+    })
+
+    test("Dopo aver aggiunto un post con la funzione addPost, l'array posts deve contenere un elemento in più.",()=>{
+        addPost(posts,{id:6,title:'Sixth Item',slug:'sixth-item'})
+        expect(posts).toHaveLength(6)
+    })
+
+    test( "Se si tenta di aggiungere un post con un id o uno slug già esistente, la funzione addPost deve lanciare un errore.",()=>{
+        expect(()=>addPost(posts, { id: 1, title: "New Item", slug: "new-item" })).toThrow('id already exists')
+        expect(()=>addPost(posts,{ id: 6, title: "new Item", slug: "first-item" })).toThrow('slug already exists')
+    })
+
+    test("Dopo aver rimosso un post con la funzione removePost, l'array posts deve contenere un elemento in meno.",()=>{
+        removePost(posts,2)
+        expect(posts).toHaveLength(4)
+    })
 
     test("La funzione findPostById restituisce il post corretto dato l’array di post e l\’id", () => {
         expect(findPostById(posts, 3)).toEqual({ id: 3, title: "Third Item", slug: "third-item" })
